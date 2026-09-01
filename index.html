@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impulsa Digital</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f4f7f8;
+  color:#13243a
+}
+header{
+  background:#102033;
+  color:white;
+  padding:18px 25px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between
+}
+.logo{
+  font-size:22px;
+  font-weight:bold
+}
+.logo span{color:#19b47b}
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:30px 20px
+}
+.hero{
+  background:white;
+  border-radius:20px;
+  padding:35px;
+  margin-bottom:25px
+}
+h1{font-size:38px;margin:0 0 12px}
+h2{margin-top:0}
+.muted{color:#66758a}
+button{
+  border:0;
+  border-radius:10px;
+  padding:13px 20px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer
+}
+.btn{
+  background:#19ad79;
+  color:white
+}
+.btn2{
+  background:white;
+  color:#13243a;
+  border:1px solid #d5dde5
+}
+.buttons{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:20px
+}
+.tools{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px
+}
+.card{
+  background:white;
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 2px 10px #0000000d
+}
+.kpis{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:15px;
+  margin:20px 0
+}
+.kpi strong{
+  display:block;
+  font-size:30px;
+  margin-top:8px
+}
+.hidden{display:none!important}
+.modal{
+  position:fixed;
+  inset:0;
+  background:#0008;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:10
+}
+.modalbox{
+  background:white;
+  border-radius:20px;
+  padding:28px;
+  width:100%;
+  max-width:500px
+}
+input,select{
+  width:100%;
+  padding:14px;
+  margin:7px 0 15px;
+  border:1px solid #ccd5df;
+  border-radius:10px;
+  font-size:16px
+}
+label{
+  font-weight:bold;
+  display:block
+}
+.resultado{
+  background:#eefaf5;
+  border-radius:12px;
+  padding:18px;
+  margin-top:15px
+}
+table{
+  width:100%;
+  border-collapse:collapse
+}
+td,th{
+  padding:12px;
+  border-bottom:1px solid #e5e9ee;
+  text-align:left
+}
+.nav{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:20px
+}
+.nav button{font-size:14px}
+@media(max-width:600px){
+ h1{font-size:30px}
+ .hero{padding:25px 20px}
+ header{padding:15px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">iD IMPULSA <span>DIGITAL</span></div>
+  <button id="salirBtn" class="btn2 hidden" onclick="cerrarSesion()">Salir</button>
+</header>
+
+<!-- INICIO -->
+<section id="inicio">
+<div class="container">
+
+<div class="hero">
+  <p><b>IMPULSA DIGITAL APPS</b></p>
+  <h1>Tu negocio.<br><span style="color:#19ad79">Todo en un lugar.</span></h1>
+  <p class="muted">
+    Presupuestos, clientes, facturas, gastos y marketing
+    en una plataforma sencilla diseñada para autónomos y pymes.
+  </p>
+
+  <div class="buttons">
+    <button class="btn" onclick="abrirModal('registro')">Crear mi cuenta</button>
+    <button class="btn2" onclick="abrirModal('login')">Iniciar sesión</button>
+  </div>
+</div>
+
+<h2>Tus herramientas</h2>
+
+<div class="tools">
+  <div class="card">
+    <h3>📄 Presupuestos</h3>
+    <p class="muted">Crea y calcula presupuestos.</p>
+  </div>
+  <div class="card">
+    <h3>🧾 Facturas</h3>
+    <p class="muted">Controla tus cobros.</p>
+  </div>
+  <div class="card">
+    <h3>👥 Clientes</h3>
+    <p class="muted">Gestiona tus contactos.</p>
+  </div>
+  <div class="card">
+    <h3>📣 Marketing IA</h3>
+    <p class="muted">Crea contenido para tu negocio.</p>
+  </div>
+</div>
+
+</div>
+</section>
+
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="hidden">
+<div class="container">
+
+<div class="hero">
+  <h1>Tu negocio. <span style="color:#19ad79">Todo en un lugar.</span></h1>
+  <p class="muted" id="empresaTexto"></p>
+</div>
+
+<div class="nav">
+  <button class="btn" onclick="mostrar('presupuestos')">📄 Presupuestos</button>
+  <button class="btn2" onclick="mostrar('clientes')">👥 Clientes</button>
+  <button class="btn2" onclick="mostrar('facturas')">🧾 Facturas</button>
+  <button class="btn2" onclick="mostrar('marketing')">📣 Marketing IA</button>
+</div>
+
+<div class="kpis">
+  <div class="card kpi">
+    <small>Clientes</small>
+    <strong id="kpiClientes">0</strong>
+  </div>
+  <div class="card kpi">
+    <small>Presupuestos</small>
+    <strong id="kpiPresupuestos">0</strong>
+  </div>
+  <div class="card kpi">
+    <small>Facturas</small>
+    <strong id="kpiFacturas">0</strong>
+  </div>
+  <div class="card kpi">
+    <small>Total presupuestado</small>
+    <strong id="kpiTotal">0 €</strong>
+  </div>
+</div>
+
+<!-- PRESUPUESTOS -->
+<div id="presupuestos" class="card">
+<h2>Crear presupuesto</h2>
+
+<label>Cliente</label>
+<input id="bCliente" placeholder="Nombre del cliente">
+
+<label>Concepto</label>
+<input id="bConcepto" placeholder="Descripción del servicio">
+
+<label>Cantidad</label>
+<input id="bCantidad" type="number" value="1" min="1">
+
+<label>Precio unitario (€)</label>
+<input id="bPrecio" type="number" value="0" min="0" step="0.01">
+
+<label>IVA (%)</label>
+<select id="bIva">
+<option value="21">21%</option>
+<option value="10">10%</option>
+<option value="4">4%</option>
+<option value="0">0%</option>
+</select>
+
+<button class="btn" onclick="calcularPresupuesto()">Calcular presupuesto</button>
+
+<div id="presupuestoResultado"></div>
+
+</div>
+
+<!-- CLIENTES -->
+<div id="clientes" class="card hidden">
+<h2>Clientes</h2>
+
+<label>Nombre</label>
+<input id="nuevoCliente" placeholder="Nombre del cliente">
+
+<label>Email</label>
+<input id="emailCliente" type="email" placeholder="cliente@email.com">
+
+<button class="btn" onclick="guardarCliente()">Añadir cliente</button>
+
+<div id="listaClientes" style="margin-top:20px"></div>
+</div>
+
+<!-- FACTURAS -->
+<div id="facturas" class="card hidden">
+<h2>Facturas</h2>
+<p class="muted">Módulo preparado para gestionar tus facturas.</p>
+<button class="btn2" onclick="alert('El módulo de facturación estará disponible en la siguiente versión.')">
+Crear factura
+</button>
+</div>
+
+<!-- MARKETING -->
+<div id="marketing" class="card hidden">
+<h2>Marketing IA</h2>
+
+<label>¿Qué quieres promocionar?</label>
+<input id="marketingTema" placeholder="Ej.: promoción de verano">
+
+<button class="btn" onclick="crearContenido()">Crear contenido</button>
+
+<div id="marketingResultado" class="resultado hidden"></div>
+</div>
+
+</div>
+</section>
+
+
+<!-- MODAL -->
+<div id="modal" class="modal hidden">
+<div class="modalbox">
+
+<button style="float:right;background:none;font-size:25px" onclick="cerrarModal()">×</button>
+
+<div id="registroForm">
+<h2>Crear cuenta</h2>
+
+<label>Email</label>
+<input id="rEmail" type="email" placeholder="tu@empresa.com">
+
+<label>Contraseña</label>
+<input id="rPass" type="password" placeholder="Contraseña">
+
+<label>Nombre de empresa</label>
+<input id="rEmpresa" placeholder="Mi empresa">
+
+<button class="btn" style="width:100%" onclick="crearCuenta()">Continuar</button>
+
+<p class="muted">Los datos se guardan solo en este dispositivo.</p>
+</div>
+
+<div id="loginForm" class="hidden">
+<h2>Iniciar sesión</h2>
+
+<label>Email</label>
+<input id="lEmail" type="email" placeholder="tu@empresa.com">
+
+<label>Contraseña</label>
+<input id="lPass" type="password" placeholder="Contraseña">
+
+<button class="btn" style="width:100%" onclick="iniciarSesion()">Entrar</button>
+</div>
+
+</div>
+</div>
+
+
+<script>
+
+let datos = JSON.parse(localStorage.getItem("impulsaDatos")) || {
+  usuario:null,
+  clientes:[],
+  presupuestos:[],
+  facturas:[]
+};
+
+function guardar(){
+  localStorage.setItem("impulsaDatos",JSON.stringify(datos));
+}
+
+function abrirModal(tipo){
+  document.getElementById("modal").classList.remove("hidden");
+
+  document.getElementById("registroForm")
+    .classList.toggle("hidden",tipo!=="registro");
+
+  document.getElementById("loginForm")
+    .classList.toggle("hidden",tipo!=="login");
+}
+
+function cerrarModal(){
+  document.getElementById("modal").classList.add("hidden");
+}
+
+function crearCuenta(){
+
+  const email=document.getElementById("rEmail").value.trim();
+  const pass=document.getElementById("rPass").value;
+  const empresa=document.getElementById("rEmpresa").value.trim();
+
+  if(!email || !pass || !empresa){
+    alert("Completa todos los campos.");
+    return;
+  }
+
+  datos.usuario={email,pass,empresa};
+  guardar();
+
+  cerrarModal();
+  entrarDashboard();
+}
+
+function iniciarSesion(){
+
+  const email=document.getElementById("lEmail").value.trim();
+  const pass=document.getElementById("lPass").value;
+
+  if(!datos.usuario){
+    alert("Todavía no existe una cuenta. Crea una primero.");
+    return;
+  }
+
+  if(email!==datos.usuario.email || pass!==datos.usuario.pass){
+    alert("El email o la contraseña no son correctos.");
+    return;
+  }
+
+  cerrarModal();
+  entrarDashboard();
+}
+
+function entrarDashboard(){
+
+  document.getElementById("inicio").classList.add("hidden");
+  document.getElementById("dashboard").classList.remove("hidden");
+  document.getElementById("salirBtn").classList.remove("hidden");
+
+  document.getElementById("empresaTexto").textContent=
+    "Bienvenido a "+datos.usuario.empresa;
+
+  actualizarKPIs();
+}
+
+function cerrarSesion(){
+  document.getElementById("dashboard").classList.add("hidden");
+  document.getElementById("inicio").classList.remove("hidden");
+  document.getElementById("salirBtn").classList.add("hidden");
+}
+
+function mostrar(id){
+
+  ["presupuestos","clientes","facturas","marketing"].forEach(x=>{
+    document.getElementById(x).classList.add("hidden");
+  });
+
+  document.getElementById(id).classList.remove("hidden");
+
+  if(id==="clientes") mostrarClientes();
+}
+
+function calcularPresupuesto(){
+
+  const cliente=document.getElementById("bCliente").value.trim();
+  const concepto=document.getElementById("bConcepto").value.trim();
+  const cantidad=Number(document.getElementById("bCantidad").value)||0;
+  const precio=Number(document.getElementById("bPrecio").value)||0;
+  const iva=Number(document.getElementById("bIva").value)||0;
+
+  if(!cliente || !concepto || cantidad<=0 || precio<0){
+    alert("Completa correctamente los datos del presupuesto.");
+    return;
+  }
+
+  const base=cantidad*precio;
+  const impuesto=base*iva/100;
+  const total=base+impuesto;
+
+  const id="PRE-"+Date.now();
+
+  datos.presupuestos.push({
+    id,
+    cliente,
+    concepto,
+    cantidad,
+    precio,
+    iva,
+    base,
+    impuesto,
+    total,
+    fecha:new Date().toLocaleDateString("es-ES")
+  });
+
+  guardar();
+  actualizarKPIs();
+
+  document.getElementById("presupuestoResultado").innerHTML=`
+    <div class="resultado">
+      <h3>Presupuesto creado correctamente ✅</h3>
+      <p><b>${id}</b></p>
+      <p>Cliente: ${cliente}</p>
+      <p>Concepto: ${concepto}</p>
+      <p>Base imponible: <b>${base.toFixed(2)} €</b></p>
+      <p>IVA (${iva}%): <b>${impuesto.toFixed(2)} €</b></p>
+      <hr>
+      <h2>Total: ${total.toFixed(2)} €</h2>
+    </div>
+  `;
+}
+
+function guardarCliente(){
+
+  const nombre=document.getElementById("nuevoCliente").value.trim();
+  const email=document.getElementById("emailCliente").value.trim();
+
+  if(!nombre){
+    alert("Introduce el nombre del cliente.");
+    return;
+  }
+
+  datos.clientes.push({
+    nombre,
+    email
+  });
+
+  guardar();
+
+  document.getElementById("nuevoCliente").value="";
+  document.getElementById("emailCliente").value="";
+
+  mostrarClientes();
+  actualizarKPIs();
+}
+
+function mostrarClientes(){
+
+  const lista=document.getElementById("listaClientes");
+
+  if(datos.clientes.length===0){
+    lista.innerHTML='<p class="muted">Todavía no tienes clientes.</p>';
+    return;
+  }
+
+  lista.innerHTML=datos.clientes.map((c,i)=>`
+    <div class="card" style="margin-bottom:10px;border:1px solid #ddd">
+      <b>${c.nombre}</b>
+      <br>
+      <span class="muted">${c.email||"Sin email"}</span>
+      <br><br>
+      <button class="btn2" onclick="eliminarCliente(${i})">Eliminar</button>
+    </div>
+  `).join("");
+}
+
+function eliminarCliente(i){
+  datos.clientes.splice(i,1);
+  guardar();
+  mostrarClientes();
+  actualizarKPIs();
+}
+
+function actualizarKPIs(){
+
+  document.getElementById("kpiClientes").textContent=
+    datos.clientes.length;
+
+  document.getElementById("kpiPresupuestos").textContent=
+    datos.presupuestos.length;
+
+  document.getElementById("kpiFacturas").textContent=
+    datos.facturas.length;
+
+  const total=datos.presupuestos.reduce(
+    (s,p)=>s+p.total,0
+  );
+
+  document.getElementById("kpiTotal").textContent=
+    total.toFixed(2)+" €";
+}
+
+function crearContenido(){
+
+  const tema=document.getElementById("marketingTema").value.trim();
+
+  if(!tema){
+    alert("Escribe primero qué quieres promocionar.");
+    return;
+  }
+
+  const resultado=document.getElementById("marketingResultado");
+
+  resultado.classList.remove("hidden");
+
+  resultado.innerHTML=`
+    <h3>Propuesta de contenido</h3>
+    <p><b>Publicación:</b></p>
+    <p>
+    🚀 Descubre nuestra promoción de ${tema}.
+    Aprovecha esta oportunidad y descubre todo lo que podemos
+    hacer por tu negocio.
+    </p>
+    <p><b>CTA:</b> Contacta con nosotros y pide información.</p>
+    <p><b>Hashtags:</b> #negocio #pymes #autonomos #marketing</p>
+  `;
+}
+
+window.onload=function(){
+
+  if(datos.usuario){
+    // No iniciamos sesión automáticamente por seguridad.
+  }
+
+};
+
+</script>
+
+</body>
+</html>
