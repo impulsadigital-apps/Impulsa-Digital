@@ -1,591 +1,139 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Impulsa Digital</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Impulsa Digital Apps</title>
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f4f7f8;
-  color:#13243a
-}
-header{
-  background:#102033;
-  color:white;
-  padding:18px 25px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between
-}
-.logo{
-  font-size:22px;
-  font-weight:bold
-}
-.logo span{color:#19b47b}
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:30px 20px
-}
-.hero{
-  background:white;
-  border-radius:20px;
-  padding:35px;
-  margin-bottom:25px
-}
-h1{font-size:38px;margin:0 0 12px}
-h2{margin-top:0}
-.muted{color:#66758a}
-button{
-  border:0;
-  border-radius:10px;
-  padding:13px 20px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer
-}
-.btn{
-  background:#19ad79;
-  color:white
-}
-.btn2{
-  background:white;
-  color:#13243a;
-  border:1px solid #d5dde5
-}
-.buttons{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:20px
-}
-.tools{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:15px
-}
-.card{
-  background:white;
-  border-radius:16px;
-  padding:22px;
-  box-shadow:0 2px 10px #0000000d
-}
-.kpis{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:15px;
-  margin:20px 0
-}
-.kpi strong{
-  display:block;
-  font-size:30px;
-  margin-top:8px
-}
-.hidden{display:none!important}
-.modal{
-  position:fixed;
-  inset:0;
-  background:#0008;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  z-index:10
-}
-.modalbox{
-  background:white;
-  border-radius:20px;
-  padding:28px;
-  width:100%;
-  max-width:500px
-}
-input,select{
-  width:100%;
-  padding:14px;
-  margin:7px 0 15px;
-  border:1px solid #ccd5df;
-  border-radius:10px;
-  font-size:16px
-}
-label{
-  font-weight:bold;
-  display:block
-}
-.resultado{
-  background:#eefaf5;
-  border-radius:12px;
-  padding:18px;
-  margin-top:15px
-}
-table{
-  width:100%;
-  border-collapse:collapse
-}
-td,th{
-  padding:12px;
-  border-bottom:1px solid #e5e9ee;
-  text-align:left
-}
-.nav{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:20px
-}
-.nav button{font-size:14px}
-@media(max-width:600px){
- h1{font-size:30px}
- .hero{padding:25px 20px}
- header{padding:15px}
-}
+:root{--navy:#0D1B2A;--blue:#163B65;--green:#1FA971;--mint:#E7F7F0;--gray:#F3F5F7;--text:#17212B;--white:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--gray);color:var(--text)}
+header{background:var(--navy);color:white;padding:16px 22px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:800;font-size:22px}.logo span{color:#1FA971}
+button{border:0;border-radius:10px;padding:11px 16px;font-weight:700;cursor:pointer}
+.primary{background:var(--green);color:white}.secondary{background:white;color:var(--navy)}
+.container{max-width:1050px;margin:auto;padding:24px}.hero{background:white;border-radius:18px;padding:40px;margin-top:25px;text-align:center}
+h1{font-size:38px;margin:0 0 12px}h2{margin-top:0}.hero p{font-size:18px;color:#566}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}.card{background:white;padding:22px;border-radius:15px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}nav button{background:white;color:var(--navy)}
+.panel{background:white;padding:22px;border-radius:15px;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}label{font-weight:700;font-size:14px}input,select{width:100%;padding:11px;margin-top:6px;border:1px solid #ccd3da;border-radius:9px;font-size:15px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.total{font-size:24px;font-weight:800;margin-top:18px}
+table{width:100%;border-collapse:collapse;margin-top:12px}th,td{text-align:left;padding:10px;border-bottom:1px solid #e1e5e8}th{background:var(--gray)}
+.empty{color:#667;padding:14px 0}.danger{background:#fee;color:#a00}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modalbox{background:white;border-radius:16px;padding:24px;max-width:460px;width:100%}
+.hidden{display:none!important}.small{font-size:13px;color:#687}
+@media(max-width:700px){.cards,.grid{grid-template-columns:1fr}h1{font-size:30px}.container{padding:15px}}
 </style>
 </head>
-
 <body>
-
-<header>
-  <div class="logo">iD IMPULSA <span>DIGITAL</span></div>
-  <button id="salirBtn" class="btn2 hidden" onclick="cerrarSesion()">Salir</button>
-</header>
-
-<!-- INICIO -->
-<section id="inicio">
-<div class="container">
-
-<div class="hero">
-  <p><b>IMPULSA DIGITAL APPS</b></p>
-  <h1>Tu negocio.<br><span style="color:#19ad79">Todo en un lugar.</span></h1>
-  <p class="muted">
-    Presupuestos, clientes, facturas, gastos y marketing
-    en una plataforma sencilla diseñada para autónomos y pymes.
-  </p>
-
-  <div class="buttons">
-    <button class="btn" onclick="abrirModal('registro')">Crear mi cuenta</button>
-    <button class="btn2" onclick="abrirModal('login')">Iniciar sesión</button>
-  </div>
-</div>
-
-<h2>Tus herramientas</h2>
-
-<div class="tools">
-  <div class="card">
-    <h3>📄 Presupuestos</h3>
-    <p class="muted">Crea y calcula presupuestos.</p>
-  </div>
-  <div class="card">
-    <h3>🧾 Facturas</h3>
-    <p class="muted">Controla tus cobros.</p>
-  </div>
-  <div class="card">
-    <h3>👥 Clientes</h3>
-    <p class="muted">Gestiona tus contactos.</p>
-  </div>
-  <div class="card">
-    <h3>📣 Marketing IA</h3>
-    <p class="muted">Crea contenido para tu negocio.</p>
-  </div>
-</div>
-
-</div>
+<header><div class="logo"><span>iD</span> Impulsa Digital</div><button class="secondary" id="logoutBtn" onclick="logout()" style="display:none">Cerrar sesión</button></header>
+<main class="container">
+<section id="landing">
+<div class="hero"><h1>Tu negocio. Todo en un lugar.</h1><p>Gestiona presupuestos, clientes y mucho más de forma sencilla.</p><div class="actions" style="justify-content:center"><button class="primary" onclick="openAuth('register')">Crear mi cuenta</button><button onclick="openAuth('login')">Iniciar sesión</button></div></div>
+<div class="cards"><div class="card"><h3>💰 Presupuestos</h3><p>Crea y guarda tus presupuestos.</p></div><div class="card"><h3>👥 Clientes</h3><p>Ten tus contactos organizados.</p></div><div class="card"><h3>🤖 Marketing IA</h3><p>Herramientas inteligentes para tu negocio.</p></div></div>
 </section>
 
+<section id="app" class="hidden">
+<h2>Panel de control</h2><p id="welcome" class="small"></p>
+<nav>
+<button onclick="showSection('budget')">💰 Presupuestos</button>
+<button onclick="showSection('contacts')">👥 Contactos</button>
+<button onclick="showSection('invoices')">🧾 Facturas</button>
+<button onclick="showSection('marketing')">🤖 Marketing IA</button>
+</nav>
 
-<!-- DASHBOARD -->
-<section id="dashboard" class="hidden">
-<div class="container">
-
-<div class="hero">
-  <h1>Tu negocio. <span style="color:#19ad79">Todo en un lugar.</span></h1>
-  <p class="muted" id="empresaTexto"></p>
-</div>
-
-<div class="nav">
-  <button class="btn" onclick="mostrar('presupuestos')">📄 Presupuestos</button>
-  <button class="btn2" onclick="mostrar('clientes')">👥 Clientes</button>
-  <button class="btn2" onclick="mostrar('facturas')">🧾 Facturas</button>
-  <button class="btn2" onclick="mostrar('marketing')">📣 Marketing IA</button>
-</div>
-
-<div class="kpis">
-  <div class="card kpi">
-    <small>Clientes</small>
-    <strong id="kpiClientes">0</strong>
-  </div>
-  <div class="card kpi">
-    <small>Presupuestos</small>
-    <strong id="kpiPresupuestos">0</strong>
-  </div>
-  <div class="card kpi">
-    <small>Facturas</small>
-    <strong id="kpiFacturas">0</strong>
-  </div>
-  <div class="card kpi">
-    <small>Total presupuestado</small>
-    <strong id="kpiTotal">0 €</strong>
-  </div>
-</div>
-
-<!-- PRESUPUESTOS -->
-<div id="presupuestos" class="card">
+<div id="budget" class="panel">
 <h2>Crear presupuesto</h2>
-
-<label>Cliente</label>
-<input id="bCliente" placeholder="Nombre del cliente">
-
-<label>Concepto</label>
-<input id="bConcepto" placeholder="Descripción del servicio">
-
-<label>Cantidad</label>
-<input id="bCantidad" type="number" value="1" min="1">
-
-<label>Precio unitario (€)</label>
-<input id="bPrecio" type="number" value="0" min="0" step="0.01">
-
-<label>IVA (%)</label>
-<select id="bIva">
-<option value="21">21%</option>
-<option value="10">10%</option>
-<option value="4">4%</option>
-<option value="0">0%</option>
-</select>
-
-<button class="btn" onclick="calcularPresupuesto()">Calcular presupuesto</button>
-
-<div id="presupuestoResultado"></div>
-
+<div class="grid">
+<div><label>Cliente</label><input id="bClient" placeholder="Nombre del cliente"></div>
+<div><label>Concepto</label><input id="bConcept" placeholder="Descripción"></div>
+<div><label>Cantidad</label><input id="bQty" type="number" min="0" step="0.01" value="1"></div>
+<div><label>Precio unitario (€)</label><input id="bPrice" type="number" min="0" step="0.01" value="0"></div>
+<div><label>IVA</label><select id="bVat"><option value="21">21%</option><option value="10">10%</option><option value="4">4%</option><option value="0">0%</option></select></div>
+</div>
+<div class="actions"><button class="primary" onclick="calculateBudget()">Calcular presupuesto</button><button onclick="saveBudget()">💾 Guardar presupuesto</button></div>
+<div id="budgetResult"></div>
 </div>
 
-<!-- CLIENTES -->
-<div id="clientes" class="card hidden">
-<h2>Clientes</h2>
+<div id="savedBudgets" class="panel"><h2>Mis presupuestos</h2><div id="budgetList"></div></div>
 
-<label>Nombre</label>
-<input id="nuevoCliente" placeholder="Nombre del cliente">
-
-<label>Email</label>
-<input id="emailCliente" type="email" placeholder="cliente@email.com">
-
-<button class="btn" onclick="guardarCliente()">Añadir cliente</button>
-
-<div id="listaClientes" style="margin-top:20px"></div>
+<div id="contacts" class="panel hidden">
+<h2>Crear contacto</h2>
+<div class="grid">
+<div><label>Nombre / Empresa</label><input id="cName" placeholder="Nombre"></div>
+<div><label>Teléfono</label><input id="cPhone" placeholder="Teléfono"></div>
+<div><label>Correo electrónico</label><input id="cEmail" type="email" placeholder="correo@ejemplo.com"></div>
+<div><label>Notas</label><input id="cNotes" placeholder="Notas"></div>
 </div>
-
-<!-- FACTURAS -->
-<div id="facturas" class="card hidden">
-<h2>Facturas</h2>
-<p class="muted">Módulo preparado para gestionar tus facturas.</p>
-<button class="btn2" onclick="alert('El módulo de facturación estará disponible en la siguiente versión.')">
-Crear factura
-</button>
+<div class="actions"><button class="primary" onclick="saveContact()">💾 Guardar contacto</button></div>
 </div>
+<div id="savedContacts" class="panel hidden"><h2>Mis contactos</h2><div id="contactList"></div></div>
 
-<!-- MARKETING -->
-<div id="marketing" class="card hidden">
-<h2>Marketing IA</h2>
-
-<label>¿Qué quieres promocionar?</label>
-<input id="marketingTema" placeholder="Ej.: promoción de verano">
-
-<button class="btn" onclick="crearContenido()">Crear contenido</button>
-
-<div id="marketingResultado" class="resultado hidden"></div>
-</div>
-
-</div>
+<div id="invoices" class="panel hidden"><h2>Facturas</h2><p>Esta función estará disponible próximamente.</p></div>
+<div id="marketing" class="panel hidden"><h2>Marketing IA</h2><p>Esta función estará disponible próximamente.</p></div>
 </section>
+</main>
 
-
-<!-- MODAL -->
-<div id="modal" class="modal hidden">
-<div class="modalbox">
-
-<button style="float:right;background:none;font-size:25px" onclick="cerrarModal()">×</button>
-
-<div id="registroForm">
-<h2>Crear cuenta</h2>
-
-<label>Email</label>
-<input id="rEmail" type="email" placeholder="tu@empresa.com">
-
-<label>Contraseña</label>
-<input id="rPass" type="password" placeholder="Contraseña">
-
-<label>Nombre de empresa</label>
-<input id="rEmpresa" placeholder="Mi empresa">
-
-<button class="btn" style="width:100%" onclick="crearCuenta()">Continuar</button>
-
-<p class="muted">Los datos se guardan solo en este dispositivo.</p>
-</div>
-
-<div id="loginForm" class="hidden">
-<h2>Iniciar sesión</h2>
-
-<label>Email</label>
-<input id="lEmail" type="email" placeholder="tu@empresa.com">
-
-<label>Contraseña</label>
-<input id="lPass" type="password" placeholder="Contraseña">
-
-<button class="btn" style="width:100%" onclick="iniciarSesion()">Entrar</button>
-</div>
-
-</div>
-</div>
-
+<div class="modal" id="authModal"><div class="modalbox"><h2 id="authTitle"></h2>
+<div id="registerFields"><label>Nombre de empresa</label><input id="rCompany"><label style="display:block;margin-top:10px">Nombre</label><input id="rName"></div>
+<label style="display:block;margin-top:10px">Correo</label><input id="rEmail" type="email">
+<label style="display:block;margin-top:10px">Contraseña</label><input id="rPassword" type="password">
+<div class="actions"><button class="primary" onclick="submitAuth()">Continuar</button><button onclick="closeAuth()">Cancelar</button></div><p id="authMsg" class="small"></p></div></div>
 
 <script>
-
-let datos = JSON.parse(localStorage.getItem("impulsaDatos")) || {
-  usuario:null,
-  clientes:[],
-  presupuestos:[],
-  facturas:[]
-};
-
-function guardar(){
-  localStorage.setItem("impulsaDatos",JSON.stringify(datos));
+const UKEY='id_users', BKEY='id_budgets', CKEY='id_contacts';
+let authMode='register';
+const $=id=>document.getElementById(id);
+function get(key){try{return JSON.parse(localStorage.getItem(key)||'[]')}catch(e){return[]}}
+function set(key,v){localStorage.setItem(key,JSON.stringify(v))}
+function currentUser(){return localStorage.getItem('id_current_user')}
+function openAuth(mode){authMode=mode;$('authModal').classList.add('open');$('authTitle').textContent=mode==='register'?'Crear mi cuenta':'Iniciar sesión';$('registerFields').classList.toggle('hidden',mode!=='register');$('authMsg').textContent=''}
+function closeAuth(){$('authModal').classList.remove('open')}
+function submitAuth(){
+ const email=$('rEmail').value.trim().toLowerCase(), pass=$('rPassword').value;
+ if(!email||!pass){$('authMsg').textContent='Completa correo y contraseña.';return}
+ let users=get(UKEY);
+ if(authMode==='register'){
+   if(users.some(u=>u.email===email)){$('authMsg').textContent='Ese correo ya está registrado.';return}
+   const u={id:Date.now().toString(),company:$('rCompany').value.trim()||'Mi empresa',name:$('rName').value.trim()||'Usuario',email,pass};
+   users.push(u);set(UKEY,users);localStorage.setItem('id_current_user',u.id);closeAuth();enterApp();
+ }else{
+   const u=users.find(x=>x.email===email&&x.pass===pass);
+   if(!u){$('authMsg').textContent='Correo o contraseña incorrectos.';return}
+   localStorage.setItem('id_current_user',u.id);closeAuth();enterApp();
+ }
 }
-
-function abrirModal(tipo){
-  document.getElementById("modal").classList.remove("hidden");
-
-  document.getElementById("registroForm")
-    .classList.toggle("hidden",tipo!=="registro");
-
-  document.getElementById("loginForm")
-    .classList.toggle("hidden",tipo!=="login");
+function enterApp(){ $('landing').classList.add('hidden');$('app').classList.remove('hidden');$('logoutBtn').style.display='block';const u=get(UKEY).find(x=>x.id===currentUser());$('welcome').textContent=`Hola, ${u?.name||'usuario'} — ${u?.company||''}`;showSection('budget');renderBudgets();renderContacts()}
+function logout(){localStorage.removeItem('id_current_user');location.reload()}
+function showSection(s){['budget','contacts','savedBudgets','savedContacts','invoices','marketing'].forEach(x=>$(x).classList.add('hidden')); if(s==='budget'){ $('budget').classList.remove('hidden');$('savedBudgets').classList.remove('hidden')} if(s==='contacts'){ $('contacts').classList.remove('hidden');$('savedContacts').classList.remove('hidden')} if(s==='invoices')$('invoices').classList.remove('hidden');if(s==='marketing')$('marketing').classList.remove('hidden')}
+function calculateBudget(){
+ const q=Number($('bQty').value)||0,p=Number($('bPrice').value)||0,v=Number($('bVat').value)||0,base=q*p,iva=base*v/100,total=base+iva;
+ $('budgetResult').innerHTML=`<div class="total">Base: ${base.toFixed(2)} €<br>IVA: ${iva.toFixed(2)} €<br>Total: ${total.toFixed(2)} €</div>`;
+ return {q,p,v,base,iva,total}
 }
-
-function cerrarModal(){
-  document.getElementById("modal").classList.add("hidden");
+function saveBudget(){
+ const client=$('bClient').value.trim(), concept=$('bConcept').value.trim(), calc=calculateBudget();
+ if(!client||!concept){alert('Completa cliente y concepto antes de guardar.');return}
+ const uid=currentUser();let arr=get(BKEY).filter(x=>x.uid===uid);let all=get(BKEY);
+ const nums=all.filter(x=>x.uid===uid).map(x=>Number(x.number)||0);const number=(Math.max(0,...nums)+1);
+ all.push({id:Date.now().toString(),uid,number,date:new Date().toLocaleDateString('es-ES'),client,concept,...calc});set(BKEY,all);renderBudgets();alert('Presupuesto guardado correctamente.');$('bClient').value='';$('bConcept').value='';$('bQty').value=1;$('bPrice').value=0;$('budgetResult').innerHTML=''
 }
-
-function crearCuenta(){
-
-  const email=document.getElementById("rEmail").value.trim();
-  const pass=document.getElementById("rPass").value;
-  const empresa=document.getElementById("rEmpresa").value.trim();
-
-  if(!email || !pass || !empresa){
-    alert("Completa todos los campos.");
-    return;
-  }
-
-  datos.usuario={email,pass,empresa};
-  guardar();
-
-  cerrarModal();
-  entrarDashboard();
+function renderBudgets(){
+ const arr=get(BKEY).filter(x=>x.uid===currentUser()); if(!arr.length){$('budgetList').innerHTML='<div class="empty">Todavía no tienes presupuestos guardados.</div>';return}
+ $('budgetList').innerHTML='<table><tr><th>Nº</th><th>Fecha</th><th>Cliente</th><th>Concepto</th><th>Total</th><th></th></tr>'+arr.slice().reverse().map(x=>`<tr><td>${x.number}</td><td>${x.date}</td><td>${esc(x.client)}</td><td>${esc(x.concept)}</td><td>${x.total.toFixed(2)} €</td><td><button class="danger" onclick="deleteBudget('${x.id}')">Eliminar</button></td></tr>`).join('')+'</table>'
 }
-
-function iniciarSesion(){
-
-  const email=document.getElementById("lEmail").value.trim();
-  const pass=document.getElementById("lPass").value;
-
-  if(!datos.usuario){
-    alert("Todavía no existe una cuenta. Crea una primero.");
-    return;
-  }
-
-  if(email!==datos.usuario.email || pass!==datos.usuario.pass){
-    alert("El email o la contraseña no son correctos.");
-    return;
-  }
-
-  cerrarModal();
-  entrarDashboard();
+function deleteBudget(id){set(BKEY,get(BKEY).filter(x=>x.id!==id));renderBudgets()}
+function saveContact(){
+ const name=$('cName').value.trim(),phone=$('cPhone').value.trim(),email=$('cEmail').value.trim(),notes=$('cNotes').value.trim();
+ if(!name){alert('Introduce el nombre o empresa.');return}
+ let arr=get(CKEY);arr.push({id:Date.now().toString(),uid:currentUser(),name,phone,email,notes,date:new Date().toLocaleDateString('es-ES')});set(CKEY,arr);renderContacts();alert('Contacto guardado correctamente.');$('cName').value='';$('cPhone').value='';$('cEmail').value='';$('cNotes').value=''
 }
-
-function entrarDashboard(){
-
-  document.getElementById("inicio").classList.add("hidden");
-  document.getElementById("dashboard").classList.remove("hidden");
-  document.getElementById("salirBtn").classList.remove("hidden");
-
-  document.getElementById("empresaTexto").textContent=
-    "Bienvenido a "+datos.usuario.empresa;
-
-  actualizarKPIs();
+function renderContacts(){
+ const arr=get(CKEY).filter(x=>x.uid===currentUser());if(!arr.length){$('contactList').innerHTML='<div class="empty">Todavía no tienes contactos guardados.</div>';return}
+ $('contactList').innerHTML='<table><tr><th>Nombre</th><th>Teléfono</th><th>Correo</th><th>Notas</th><th></th></tr>'+arr.slice().reverse().map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.email)}</td><td>${esc(x.notes)}</td><td><button class="danger" onclick="deleteContact('${x.id}')">Eliminar</button></td></tr>`).join('')+'</table>'
 }
-
-function cerrarSesion(){
-  document.getElementById("dashboard").classList.add("hidden");
-  document.getElementById("inicio").classList.remove("hidden");
-  document.getElementById("salirBtn").classList.add("hidden");
-}
-
-function mostrar(id){
-
-  ["presupuestos","clientes","facturas","marketing"].forEach(x=>{
-    document.getElementById(x).classList.add("hidden");
-  });
-
-  document.getElementById(id).classList.remove("hidden");
-
-  if(id==="clientes") mostrarClientes();
-}
-
-function calcularPresupuesto(){
-
-  const cliente=document.getElementById("bCliente").value.trim();
-  const concepto=document.getElementById("bConcepto").value.trim();
-  const cantidad=Number(document.getElementById("bCantidad").value)||0;
-  const precio=Number(document.getElementById("bPrecio").value)||0;
-  const iva=Number(document.getElementById("bIva").value)||0;
-
-  if(!cliente || !concepto || cantidad<=0 || precio<0){
-    alert("Completa correctamente los datos del presupuesto.");
-    return;
-  }
-
-  const base=cantidad*precio;
-  const impuesto=base*iva/100;
-  const total=base+impuesto;
-
-  const id="PRE-"+Date.now();
-
-  datos.presupuestos.push({
-    id,
-    cliente,
-    concepto,
-    cantidad,
-    precio,
-    iva,
-    base,
-    impuesto,
-    total,
-    fecha:new Date().toLocaleDateString("es-ES")
-  });
-
-  guardar();
-  actualizarKPIs();
-
-  document.getElementById("presupuestoResultado").innerHTML=`
-    <div class="resultado">
-      <h3>Presupuesto creado correctamente ✅</h3>
-      <p><b>${id}</b></p>
-      <p>Cliente: ${cliente}</p>
-      <p>Concepto: ${concepto}</p>
-      <p>Base imponible: <b>${base.toFixed(2)} €</b></p>
-      <p>IVA (${iva}%): <b>${impuesto.toFixed(2)} €</b></p>
-      <hr>
-      <h2>Total: ${total.toFixed(2)} €</h2>
-    </div>
-  `;
-}
-
-function guardarCliente(){
-
-  const nombre=document.getElementById("nuevoCliente").value.trim();
-  const email=document.getElementById("emailCliente").value.trim();
-
-  if(!nombre){
-    alert("Introduce el nombre del cliente.");
-    return;
-  }
-
-  datos.clientes.push({
-    nombre,
-    email
-  });
-
-  guardar();
-
-  document.getElementById("nuevoCliente").value="";
-  document.getElementById("emailCliente").value="";
-
-  mostrarClientes();
-  actualizarKPIs();
-}
-
-function mostrarClientes(){
-
-  const lista=document.getElementById("listaClientes");
-
-  if(datos.clientes.length===0){
-    lista.innerHTML='<p class="muted">Todavía no tienes clientes.</p>';
-    return;
-  }
-
-  lista.innerHTML=datos.clientes.map((c,i)=>`
-    <div class="card" style="margin-bottom:10px;border:1px solid #ddd">
-      <b>${c.nombre}</b>
-      <br>
-      <span class="muted">${c.email||"Sin email"}</span>
-      <br><br>
-      <button class="btn2" onclick="eliminarCliente(${i})">Eliminar</button>
-    </div>
-  `).join("");
-}
-
-function eliminarCliente(i){
-  datos.clientes.splice(i,1);
-  guardar();
-  mostrarClientes();
-  actualizarKPIs();
-}
-
-function actualizarKPIs(){
-
-  document.getElementById("kpiClientes").textContent=
-    datos.clientes.length;
-
-  document.getElementById("kpiPresupuestos").textContent=
-    datos.presupuestos.length;
-
-  document.getElementById("kpiFacturas").textContent=
-    datos.facturas.length;
-
-  const total=datos.presupuestos.reduce(
-    (s,p)=>s+p.total,0
-  );
-
-  document.getElementById("kpiTotal").textContent=
-    total.toFixed(2)+" €";
-}
-
-function crearContenido(){
-
-  const tema=document.getElementById("marketingTema").value.trim();
-
-  if(!tema){
-    alert("Escribe primero qué quieres promocionar.");
-    return;
-  }
-
-  const resultado=document.getElementById("marketingResultado");
-
-  resultado.classList.remove("hidden");
-
-  resultado.innerHTML=`
-    <h3>Propuesta de contenido</h3>
-    <p><b>Publicación:</b></p>
-    <p>
-    🚀 Descubre nuestra promoción de ${tema}.
-    Aprovecha esta oportunidad y descubre todo lo que podemos
-    hacer por tu negocio.
-    </p>
-    <p><b>CTA:</b> Contacta con nosotros y pide información.</p>
-    <p><b>Hashtags:</b> #negocio #pymes #autonomos #marketing</p>
-  `;
-}
-
-window.onload=function(){
-
-  if(datos.usuario){
-    // No iniciamos sesión automáticamente por seguridad.
-  }
-
-};
-
+function deleteContact(id){set(CKEY,get(CKEY).filter(x=>x.id!==id));renderContacts()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+if(currentUser())enterApp();
 </script>
-
-</body>
-</html>
+</body></html>
