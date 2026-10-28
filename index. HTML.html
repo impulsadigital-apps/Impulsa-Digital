@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Impulsa Digital Apps</title>
+<style>
+:root{--navy:#0D1B2A;--blue:#163B65;--green:#1FA971;--mint:#E7F7F0;--gray:#F3F5F7;--text:#17212B;--white:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--gray);color:var(--text)}
+header{background:var(--navy);color:white;padding:16px 22px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:800;font-size:22px}.logo span{color:#1FA971}
+button{border:0;border-radius:10px;padding:11px 16px;font-weight:700;cursor:pointer}
+.primary{background:var(--green);color:white}.secondary{background:white;color:var(--navy)}
+.container{max-width:1050px;margin:auto;padding:24px}.hero{background:white;border-radius:18px;padding:40px;margin-top:25px;text-align:center}
+h1{font-size:38px;margin:0 0 12px}h2{margin-top:0}.hero p{font-size:18px;color:#566}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}.card{background:white;padding:22px;border-radius:15px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}nav button{background:white;color:var(--navy)}
+.panel{background:white;padding:22px;border-radius:15px;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}label{font-weight:700;font-size:14px}input,select{width:100%;padding:11px;margin-top:6px;border:1px solid #ccd3da;border-radius:9px;font-size:15px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.total{font-size:24px;font-weight:800;margin-top:18px}
+table{width:100%;border-collapse:collapse;margin-top:12px}th,td{text-align:left;padding:10px;border-bottom:1px solid #e1e5e8}th{background:var(--gray)}
+.empty{color:#667;padding:14px 0}.danger{background:#fee;color:#a00}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modalbox{background:white;border-radius:16px;padding:24px;max-width:460px;width:100%}
+.hidden{display:none!important}.small{font-size:13px;color:#687}
+@media(max-width:700px){.cards,.grid{grid-template-columns:1fr}h1{font-size:30px}.container{padding:15px}}
+</style>
+</head>
+<body>
+<header><div class="logo"><span>iD</span> Impulsa Digital</div><button class="secondary" id="logoutBtn" onclick="logout()" style="display:none">Cerrar sesión</button></header>
+<main class="container">
+<section id="landing">
+<div class="hero"><h1>Tu negocio. Todo en un lugar.</h1><p>Gestiona presupuestos, clientes y mucho más de forma sencilla.</p><div class="actions" style="justify-content:center"><button class="primary" onclick="openAuth('register')">Crear mi cuenta</button><button onclick="openAuth('login')">Iniciar sesión</button></div></div>
+<div class="cards"><div class="card"><h3>💰 Presupuestos</h3><p>Crea y guarda tus presupuestos.</p></div><div class="card"><h3>👥 Clientes</h3><p>Ten tus contactos organizados.</p></div><div class="card"><h3>🤖 Marketing IA</h3><p>Herramientas inteligentes para tu negocio.</p></div></div>
+</section>
+
+<section id="app" class="hidden">
+<h2>Panel de control</h2><p id="welcome" class="small"></p>
+<nav>
+<button onclick="showSection('budget')">💰 Presupuestos</button>
+<button onclick="showSection('contacts')">👥 Contactos</button>
+<button onclick="showSection('invoices')">🧾 Facturas</button>
+<button onclick="showSection('marketing')">🤖 Marketing IA</button>
+</nav>
+
+<div id="budget" class="panel">
+<h2>Crear presupuesto</h2>
+<div class="grid">
+<div><label>Cliente</label><input id="bClient" placeholder="Nombre del cliente"></div>
+<div><label>Concepto</label><input id="bConcept" placeholder="Descripción"></div>
+<div><label>Cantidad</label><input id="bQty" type="number" min="0" step="0.01" value="1"></div>
+<div><label>Precio unitario (€)</label><input id="bPrice" type="number" min="0" step="0.01" value="0"></div>
+<div><label>IVA</label><select id="bVat"><option value="21">21%</option><option value="10">10%</option><option value="4">4%</option><option value="0">0%</option></select></div>
+</div>
+<div class="actions"><button class="primary" onclick="calculateBudget()">Calcular presupuesto</button><button onclick="saveBudget()">💾 Guardar presupuesto</button></div>
+<div id="budgetResult"></div>
+</div>
+
+<div id="savedBudgets" class="panel"><h2>Mis presupuestos</h2><div id="budgetList"></div></div>
+
+<div id="contacts" class="panel hidden">
+<h2>Crear contacto</h2>
+<div class="grid">
+<div><label>Nombre / Empresa</label><input id="cName" placeholder="Nombre"></div>
+<div><label>Teléfono</label><input id="cPhone" placeholder="Teléfono"></div>
+<div><label>Correo electrónico</label><input id="cEmail" type="email" placeholder="correo@ejemplo.com"></div>
+<div><label>Notas</label><input id="cNotes" placeholder="Notas"></div>
+</div>
+<div class="actions"><button class="primary" onclick="saveContact()">💾 Guardar contacto</button></div>
+</div>
+<div id="savedContacts" class="panel hidden"><h2>Mis contactos</h2><div id="contactList"></div></div>
+
+<div id="invoices" class="panel hidden"><h2>Facturas</h2><p>Esta función estará disponible próximamente.</p></div>
+<div id="marketing" class="panel hidden"><h2>Marketing IA</h2><p>Esta función estará disponible próximamente.</p></div>
+</section>
+</main>
+
+<div class="modal" id="authModal"><div class="modalbox"><h2 id="authTitle"></h2>
+<div id="registerFields"><label>Nombre de empresa</label><input id="rCompany"><label style="display:block;margin-top:10px">Nombre</label><input id="rName"></div>
+<label style="display:block;margin-top:10px">Correo</label><input id="rEmail" type="email">
+<label style="display:block;margin-top:10px">Contraseña</label><input id="rPassword" type="password">
+<div class="actions"><button class="primary" onclick="submitAuth()">Continuar</button><button onclick="closeAuth()">Cancelar</button></div><p id="authMsg" class="small"></p></div></div>
+
+<script>
+const UKEY='id_users', BKEY='id_budgets', CKEY='id_contacts';
+let authMode='register';
+const $=id=>document.getElementById(id);
+function get(key){try{return JSON.parse(localStorage.getItem(key)||'[]')}catch(e){return[]}}
+function set(key,v){localStorage.setItem(key,JSON.stringify(v))}
+function currentUser(){return localStorage.getItem('id_current_user')}
+function openAuth(mode){authMode=mode;$('authModal').classList.add('open');$('authTitle').textContent=mode==='register'?'Crear mi cuenta':'Iniciar sesión';$('registerFields').classList.toggle('hidden',mode!=='register');$('authMsg').textContent=''}
+function closeAuth(){$('authModal').classList.remove('open')}
+function submitAuth(){
+ const email=$('rEmail').value.trim().toLowerCase(), pass=$('rPassword').value;
+ if(!email||!pass){$('authMsg').textContent='Completa correo y contraseña.';return}
+ let users=get(UKEY);
+ if(authMode==='register'){
+   if(users.some(u=>u.email===email)){$('authMsg').textContent='Ese correo ya está registrado.';return}
+   const u={id:Date.now().toString(),company:$('rCompany').value.trim()||'Mi empresa',name:$('rName').value.trim()||'Usuario',email,pass};
+   users.push(u);set(UKEY,users);localStorage.setItem('id_current_user',u.id);closeAuth();enterApp();
+ }else{
+   const u=users.find(x=>x.email===email&&x.pass===pass);
+   if(!u){$('authMsg').textContent='Correo o contraseña incorrectos.';return}
+   localStorage.setItem('id_current_user',u.id);closeAuth();enterApp();
+ }
+}
+function enterApp(){ $('landing').classList.add('hidden');$('app').classList.remove('hidden');$('logoutBtn').style.display='block';const u=get(UKEY).find(x=>x.id===currentUser());$('welcome').textContent=`Hola, ${u?.name||'usuario'} — ${u?.company||''}`;showSection('budget');renderBudgets();renderContacts()}
+function logout(){localStorage.removeItem('id_current_user');location.reload()}
+function showSection(s){['budget','contacts','savedBudgets','savedContacts','invoices','marketing'].forEach(x=>$(x).classList.add('hidden')); if(s==='budget'){ $('budget').classList.remove('hidden');$('savedBudgets').classList.remove('hidden')} if(s==='contacts'){ $('contacts').classList.remove('hidden');$('savedContacts').classList.remove('hidden')} if(s==='invoices')$('invoices').classList.remove('hidden');if(s==='marketing')$('marketing').classList.remove('hidden')}
+function calculateBudget(){
+ const q=Number($('bQty').value)||0,p=Number($('bPrice').value)||0,v=Number($('bVat').value)||0,base=q*p,iva=base*v/100,total=base+iva;
+ $('budgetResult').innerHTML=`<div class="total">Base: ${base.toFixed(2)} €<br>IVA: ${iva.toFixed(2)} €<br>Total: ${total.toFixed(2)} €</div>`;
+ return {q,p,v,base,iva,total}
+}
+function saveBudget(){
+ const client=$('bClient').value.trim(), concept=$('bConcept').value.trim(), calc=calculateBudget();
+ if(!client||!concept){alert('Completa cliente y concepto antes de guardar.');return}
+ const uid=currentUser();let arr=get(BKEY).filter(x=>x.uid===uid);let all=get(BKEY);
+ const nums=all.filter(x=>x.uid===uid).map(x=>Number(x.number)||0);const number=(Math.max(0,...nums)+1);
+ all.push({id:Date.now().toString(),uid,number,date:new Date().toLocaleDateString('es-ES'),client,concept,...calc});set(BKEY,all);renderBudgets();alert('Presupuesto guardado correctamente.');$('bClient').value='';$('bConcept').value='';$('bQty').value=1;$('bPrice').value=0;$('budgetResult').innerHTML=''
+}
+function renderBudgets(){
+ const arr=get(BKEY).filter(x=>x.uid===currentUser()); if(!arr.length){$('budgetList').innerHTML='<div class="empty">Todavía no tienes presupuestos guardados.</div>';return}
+ $('budgetList').innerHTML='<table><tr><th>Nº</th><th>Fecha</th><th>Cliente</th><th>Concepto</th><th>Total</th><th></th></tr>'+arr.slice().reverse().map(x=>`<tr><td>${x.number}</td><td>${x.date}</td><td>${esc(x.client)}</td><td>${esc(x.concept)}</td><td>${x.total.toFixed(2)} €</td><td><button onclick="viewBudget('${x.id}')">Ver</button> <button class="danger" onclick="deleteBudget('${x.id}')">Eliminar</button></td></tr>`).join('')+'</table>'
+}
+function viewBudget(id){
+ const x=get(BKEY).find(b=>b.id===id);
+ if(!x)return;
+ const lines=`Presupuesto nº ${x.number}\nFecha: ${x.date}\nCliente: ${x.client}\nConcepto: ${x.concept}\n\nCantidad: ${x.q}\nPrecio unitario: ${Number(x.p).toFixed(2)} €\nBase: ${Number(x.base).toFixed(2)} €\nIVA: ${Number(x.iva).toFixed(2)} €\nTotal: ${Number(x.total).toFixed(2)} €`;
+ alert(lines);
+}
+function deleteBudget(id){set(BKEY,get(BKEY).filter(x=>x.id!==id));renderBudgets()}
+function saveContact(){
+ const name=$('cName').value.trim(),phone=$('cPhone').value.trim(),email=$('cEmail').value.trim(),notes=$('cNotes').value.trim();
+ if(!name){alert('Introduce el nombre o empresa.');return}
+ let arr=get(CKEY);arr.push({id:Date.now().toString(),uid:currentUser(),name,phone,email,notes,date:new Date().toLocaleDateString('es-ES')});set(CKEY,arr);renderContacts();alert('Contacto guardado correctamente.');$('cName').value='';$('cPhone').value='';$('cEmail').value='';$('cNotes').value=''
+}
+function renderContacts(){
+ const arr=get(CKEY).filter(x=>x.uid===currentUser());if(!arr.length){$('contactList').innerHTML='<div class="empty">Todavía no tienes contactos guardados.</div>';return}
+ $('contactList').innerHTML='<table><tr><th>Nombre</th><th>Teléfono</th><th>Correo</th><th>Notas</th><th></th></tr>'+arr.slice().reverse().map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.email)}</td><td>${esc(x.notes)}</td><td><button class="danger" onclick="deleteContact('${x.id}')">Eliminar</button></td></tr>`).join('')+'</table>'
+}
+function deleteContact(id){set(CKEY,get(CKEY).filter(x=>x.id!==id));renderContacts()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+if(currentUser())enterApp();
+</script>
+</body></html>
